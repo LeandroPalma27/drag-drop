@@ -1,0 +1,1 @@
+// Componente HTML para el mainBox de zona de dropeo con archivos

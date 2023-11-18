@@ -1,0 +1,1 @@
+// Componente HTML para un archivo cargado en el array principal de archivos

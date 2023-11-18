@@ -1,3 +1,172 @@
-body {
-    background-color: red;
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans&display=swap');
+
+* {
+    font-family: 'Bebas Neue', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
+.principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.body-personal {
+    background-color: rgb(96, 96, 96);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.principal_box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.8s ease-in-out;
+    background-color: rgb(67, 67, 67);
+    width: 100vh;
+    padding: 25px;
+}
+
+.file-dragged-in_1 {
+    background-color: rgb(200, 200, 200);
+}
+
+.box_border {
+    width: 100%;
+    height: 100%;
+    border: 2px rgb(25, 25, 25) dashed;
+}
+
+.box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.file-dragged-in_2 {
+    border: 2px rgb(25, 25, 25) dashed;
+}
+
+.box>aside {
+    font-size: 85px;
+}
+
+.box>section {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.box_1 {
+    color: rgb(158, 158, 158);
+}
+
+.box_2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.box_2>span {
+    padding-bottom: 10px;
+    color: white;
+}
+
+.select-file_button {
+    font-size: 18px;
+    border: none;
+    outline: none;
+    padding: 8px 28px;
+    border-radius: 15px;
+    background-color: rgb(156, 20, 20);
+    color: white;
+    transition: all 0.7s ease-in-out;
+}
+
+.select-file_button:hover {
+    background-color: rgb(195, 34, 34);
+    transition: all 0.7s ease-in-out;
+}
+
+.files-container {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 0;
+}
+
+.file {
+    width: 225px;
+    height: 280px;
+    background-color: white;
+    position: relative;
+}
+
+.file_box {
+    width: 100%;
+    height: 100%;
+}
+
+.file_1 {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 85%;
+}
+
+.file_1 > img {
+    width: 100%;
+    height: 100%;
+}
+
+.file-closer {
+    background-color: rgb(198, 39, 39);
+    color: white;
+    transition: all 0.2s ease-in-out;
+    position: absolute;
+    opacity: 0;
+    left: calc(100% - 12px);
+    bottom: calc(100% - 12px);
+    border: none;
+    outline: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 30px;
+    z-index: 100000;
+    font-size: 13px;
+}
+
+.file_box:hover + .file-closer{
+    opacity: 1;
+}
+
+.file-closer:hover {
+    opacity: 1;
+}
+
+.file_2 {
+    padding: 5px 6px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 15%;
+    font-size: 12px;
 }
