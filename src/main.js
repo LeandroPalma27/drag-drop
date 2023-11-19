@@ -7,6 +7,7 @@ import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 import { cardFile } from './js/components/file';
 import { secondBox } from './js/components/second-box';
+import { firstBox } from './js/components/first-box';
 
 // TODO: TRATAR DE MODULARIZAR EL CODIGO
 // Implementar cambio de vista del mainBox cuando tenga archivos cargados(se cambiara si se detecta que hay archivos cargados en la aplicacion)
@@ -18,7 +19,7 @@ const inputFile = document.querySelector('#fileElem');
 // Boton que acciona el inputFile (PARA EVITAR USAR EL TEXTO PREDEFINIDO DEL INPUT FILE)
 const btnSelectFile = document.querySelector('#btnSelectFile');
 // Array que almacenara todos los archivos cargados hasta el momento, para su posterior subida
-const archivosCargados = [];
+let archivosCargados = [];
 
 // Evento de dropeo de elementos (EXCLUSIVO PARA CUANDO YA SE HAYAN DROPEADO COSAS)
 mainBox.addEventListener('drop', (e) => {
@@ -28,7 +29,6 @@ mainBox.addEventListener('drop', (e) => {
         const res = manejarArchivos([...e.dataTransfer.files])
         // Y en ese caso, ejecutamos la funcion que cambia la vista del mainBox (CON LOS ARCHIVOS LISTOS PARA SER ENVIADOS)
         if (res) mostrarArchivosCargados();
-        console.log(archivosCargados[0])
     }
 }, false)
 
@@ -60,7 +60,6 @@ inputFile?.addEventListener('change', function () {
     this.type = "file";
     // Y en ese caso, ejecutamos la funcion que cambia la vista del mainBox (CON LOS ARCHIVOS LISTOS PARA SER ENVIADOS)
     if (res) mostrarArchivosCargados();
-    console.log(archivosCargados)
 });
 
 // Funcion para cargar archivos al array de archivos listos para enviar
@@ -131,10 +130,27 @@ function preventDefaults(e) {
 */
 function mostrarArchivosCargados() {
     const cardRenders = archivosCargados.map(archivo => cardFile(archivo));
-    console.log(cardRenders[0])
     const finalBox = secondBox(cardRenders);
-    console.log(finalBox)
+    console.log(finalBox);
     if (archivosCargados.length > 0) mainBox.classList.add('file-dragged-in_1_with-files');
     mainBox.innerHTML = ''
     mainBox.appendChild(finalBox)
+    createDeleteFileEvents(document.querySelectorAll('.delete-button'))
 }
+
+function createDeleteFileEvents(deleteFileButtons) {
+    deleteFileButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const res = archivosCargados.filter((value, index, arr) => {
+                /* if (arr[index]) */
+            });
+            archivosCargados = [...res]
+            if (res.length > 0) mostrarArchivosCargados();
+            else mainBox.innerHTML = firstBox, mainBox.classList.remove('file-dragged-in_1_with-files');
+        });
+    });
+}
+
+//TODO: Implementar refuncionamiento del input de la zona de dropeo al eliminar todos los archivos del array principal
+//TODO: Documentar nuevas cosas implementadas
+//TODO: Solo hacer que se borre un repetido del array principal

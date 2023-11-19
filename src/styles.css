@@ -40,12 +40,12 @@
 }
 
 .file-dragged-in_1 {
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(233, 233, 233);
 }
 
 .box_border {
     width: 100%;
-    height: 330px;
+    height: auto;
     border: 2px rgb(25, 25, 25) dashed;
 }
 
@@ -56,7 +56,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-bottom: 20px;
+    padding: 25px;
 }
 
 .file-dragged-in_2 {
@@ -84,7 +84,6 @@
 }
 
 .box_2>span {
-    padding-bottom: 10px;
     color: white;
 }
 
@@ -116,10 +115,11 @@
 }
 
 .file {
-    width: 225px;
-    height: 280px;
+    width: 200px;
+    height: 200px;
     background-color: white;
     position: relative;
+    border-radius: 4px;
     box-shadow: 10px 11px 24px -8px rgba(0, 0, 0, 0.75);
     -webkit-box-shadow: 10px 11px 24px -8px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 10px 11px 24px -8px rgba(0, 0, 0, 0.75);
@@ -133,6 +133,7 @@
 .file_1 {
     position: relative;
     display: flex;
+    object-fit: cover;
     width: 100%;
     height: 85%;
 }
@@ -140,6 +141,8 @@
 .file_1>img {
     width: 100%;
     height: 100%;
+    display: flex;
+    object-fit: contain;
 }
 
 .file-closer {
@@ -176,5 +179,5 @@
 }
 
 .file-dragged-in_1_with-files {
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(233, 233, 233);
 }

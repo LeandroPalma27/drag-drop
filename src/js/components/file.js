@@ -26,6 +26,8 @@ export function cardFile(file) {
     const i = document.createElement('i');
     i.classList = 'fa-solid fa-xmark'
     button.appendChild(i)
+    button.name = file.name;
+    button.classList.add('delete-button')
     fileCard.appendChild(fileBox)
     fileCard.appendChild(button)
     return fileCard;
