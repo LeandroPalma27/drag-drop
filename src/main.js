@@ -5,6 +5,8 @@ import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
+import { cardFile } from './js/components/file';
+import { secondBox } from './js/components/second-box';
 
 // TODO: TRATAR DE MODULARIZAR EL CODIGO
 // Implementar cambio de vista del mainBox cuando tenga archivos cargados(se cambiara si se detecta que hay archivos cargados en la aplicacion)
@@ -20,14 +22,13 @@ const archivosCargados = [];
 
 // Evento de dropeo de elementos (EXCLUSIVO PARA CUANDO YA SE HAYAN DROPEADO COSAS)
 mainBox.addEventListener('drop', (e) => {
-    console.log(e.dataTransfer)
     // Se evalua si se dropearon archivos
     if (!!e.dataTransfer.files) {
         // Esperamos un true en caso de que el handler haya cargado archivos al array principal
         const res = manejarArchivos([...e.dataTransfer.files])
         // Y en ese caso, ejecutamos la funcion que cambia la vista del mainBox (CON LOS ARCHIVOS LISTOS PARA SER ENVIADOS)
         if (res) mostrarArchivosCargados();
-        console.log(archivosCargados)
+        console.log(archivosCargados[0])
     }
 }, false)
 
@@ -129,5 +130,11 @@ function preventDefaults(e) {
     * Tambien se ejecuta cada que se elimina un archivo del array principal
 */
 function mostrarArchivosCargados() {
-
+    const cardRenders = archivosCargados.map(archivo => cardFile(archivo));
+    console.log(cardRenders[0])
+    const finalBox = secondBox(cardRenders);
+    console.log(finalBox)
+    if (archivosCargados.length > 0) mainBox.classList.add('file-dragged-in_1_with-files');
+    mainBox.innerHTML = ''
+    mainBox.appendChild(finalBox)
 }

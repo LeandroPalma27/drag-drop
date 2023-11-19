@@ -35,6 +35,7 @@
     transition: background 0.8s ease-in-out;
     background-color: rgb(67, 67, 67);
     width: 100vh;
+    height: auto;
     padding: 25px;
 }
 
@@ -44,7 +45,7 @@
 
 .box_border {
     width: 100%;
-    height: 100%;
+    height: 330px;
     border: 2px rgb(25, 25, 25) dashed;
 }
 
@@ -119,6 +120,9 @@
     height: 280px;
     background-color: white;
     position: relative;
+    box-shadow: 10px 11px 24px -8px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 10px 11px 24px -8px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 11px 24px -8px rgba(0, 0, 0, 0.75);
 }
 
 .file_box {
@@ -133,7 +137,7 @@
     height: 85%;
 }
 
-.file_1 > img {
+.file_1>img {
     width: 100%;
     height: 100%;
 }
@@ -155,7 +159,7 @@
     font-size: 13px;
 }
 
-.file_box:hover + .file-closer{
+.file_box:hover+.file-closer {
     opacity: 1;
 }
 
@@ -169,4 +173,8 @@
     width: 100%;
     height: 15%;
     font-size: 12px;
+}
+
+.file-dragged-in_1_with-files {
+    background-color: rgb(200, 200, 200);
 }
