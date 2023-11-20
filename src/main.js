@@ -32,10 +32,10 @@ mainBox.addEventListener('drop', (e) => {
     }
 }, false)
 
-// Eventos para el cambio de diseño del mainBox (PARA CUANDO SE ESTEN ARRASTRANDO ARCHIVOS)
-;['dragenter', 'dragover'].forEach(eventName => {
-    mainBox.addEventListener(eventName, arrastreActivo, false)
-})
+    // Eventos para el cambio de diseño del mainBox (PARA CUANDO SE ESTEN ARRASTRANDO ARCHIVOS)
+    ;['dragenter', 'dragover'].forEach(eventName => {
+        mainBox.addEventListener(eventName, arrastreActivo, false)
+    })
 function arrastreActivo() {
     this.classList.add('file-dragged-in_1');
 }
@@ -93,19 +93,28 @@ function manejarArchivos(files) {
         // Y en caso de que la cantidad de elementos del array de archivos validos, sumada a cantidad de archivos ya cargados a la lista de archivos listos para subir, sea 6
         // se van a pushear en su totalidad a este ultimo array.
         if (archivosCargados.length + allowedFiles.length <= 6) {
-            allowedFiles.forEach(file => archivosCargados.push(file));
+            allowedFiles.forEach(file => archivosCargados.push(
+                {
+                    idFile: Date.now(),
+                    file
+                }));
         } else {
             // Caso contrario, solo se van a pushear la cantidad de elementos restantes, evaluando la diferencia de 6 menos la cantidad de elementos que tenga el array
             // de archivos ya cargados.
             let cont = 6 - archivosCargados.length;
             // Hasta que el contador no sea 0, se seguiran pusheando los archivos al array principal.
             while (cont > 0) {
-                archivosCargados.push(allowedFiles[cont - 1])
+                archivosCargados.push(
+                    {
+                        idFile: Date.now(),
+                        file: allowedFiles[cont - 1]
+                    })
                 cont--
             }
             // Y terminamos mostrando un alert que indique lo siguiente (YA QUE HUBO UN EXCESO DE ARCHIVOS)
             alert('Solo se permiten 6 archivos')
         }
+        console.log(archivosCargados)
         // Retornamos true ya que se cargaron archivos al array principal
         return true;
     }
@@ -129,22 +138,39 @@ function preventDefaults(e) {
     * Tambien se ejecuta cada que se elimina un archivo del array principal
 */
 function mostrarArchivosCargados() {
+    // Generamos un array con todos los cardFile por cada archivo existente en el array principal
     const cardRenders = archivosCargados.map(archivo => cardFile(archivo));
+    // Ahora generamos el div final con todos esos cardFiles incluidos
     const finalBox = secondBox(cardRenders);
-    console.log(finalBox);
-    if (archivosCargados.length > 0) mainBox.classList.add('file-dragged-in_1_with-files');
+    // Añadimos una clase css al mainBox, para que mantenga el fondo blanco como al arrastrar archivos en esta misma
+    mainBox.classList.add('file-dragged-in_1_with-files');
+    // Quitamos todo lo que contenga el mainBox
     mainBox.innerHTML = ''
+    // Añadimos el nodo que contiene todos los cardFiles
     mainBox.appendChild(finalBox)
+    // Ahora creamos los eventos para los botones de elminar de todos esos cardFiles
     createDeleteFileEvents(document.querySelectorAll('.delete-button'))
 }
 
+
+// Function que crea los eventos para cada uno de los botones de eliminar de los cardFiles
+/*
+    * Recibe un array de todos los botones, obtenidos de un querySelectorAll desde la function de mostrarArchivosCargados()
+    * A traves de un forEach, crea eventos para cada uno de los botones
+    * El evento click generado se encarga de elminar el archivo del array pricipal, a traves de un filter
+    * Luego de filtrar todos los elementos, el resultado se reasigna al array principal (YA NO TIENE EL ELEMENTO ELIMINADO EN CUESTION)
+    * luego, si el arrayPrincipal tiene elementos (QUIERE DECIR QUE AUN QUEDAN FOTOS), se vuelve a llamar a la funcion que muestra los archivos cargados,
+      actualizando el DOM, y este a su vez creando nuevos botones y por lo tanto nuevos eventos para estos para repetir el proceso.
+    * Si el array principal termina vacio, se regresa el mainBox a su estado original.
+ */
 function createDeleteFileEvents(deleteFileButtons) {
     deleteFileButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const res = archivosCargados.filter((value, index, arr) => {
-                /* if (arr[index]) */
+            const res = archivosCargados.filter((value) => {
+                return button.name != value.idFile;
             });
             archivosCargados = [...res]
+            console.log(archivosCargados)
             if (res.length > 0) mostrarArchivosCargados();
             else mainBox.innerHTML = firstBox, mainBox.classList.remove('file-dragged-in_1_with-files');
         });
@@ -152,5 +178,4 @@ function createDeleteFileEvents(deleteFileButtons) {
 }
 
 //TODO: Implementar refuncionamiento del input de la zona de dropeo al eliminar todos los archivos del array principal
-//TODO: Documentar nuevas cosas implementadas
-//TODO: Solo hacer que se borre un repetido del array principal
+//TODO: Documentar componentes 

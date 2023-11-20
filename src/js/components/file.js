@@ -1,5 +1,5 @@
 // Componente HTML para el mainBox de zona de dropeo con archivos (card del archivo ya cargado y renderizado)
-export function cardFile(file) {
+export function cardFile({idFile, file}) {
     const img = document.createElement('img');
     const reader = new FileReader();
     reader.readAsDataURL(file)
@@ -26,7 +26,7 @@ export function cardFile(file) {
     const i = document.createElement('i');
     i.classList = 'fa-solid fa-xmark'
     button.appendChild(i)
-    button.name = file.name;
+    button.name = idFile;
     button.classList.add('delete-button')
     fileCard.appendChild(fileBox)
     fileCard.appendChild(button)
