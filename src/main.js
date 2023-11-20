@@ -172,10 +172,22 @@ function createDeleteFileEvents(deleteFileButtons) {
             archivosCargados = [...res]
             console.log(archivosCargados)
             if (res.length > 0) mostrarArchivosCargados();
-            else mainBox.innerHTML = firstBox, mainBox.classList.remove('file-dragged-in_1_with-files');
+            // Se limpia con el innerHTML, y luego se agrega el HTMLElement que contiene la dropZone, al final quitamos la clase que cambia el fondo a blanco cuando hay archivos presentes.
+            else mainBox.innerHTML = '', mainBox.appendChild(firstBox()), recreateEventsForInputFileAndInputButton(), mainBox.classList.remove('file-dragged-in_1_with-files');
         });
     });
 }
 
-//TODO: Implementar refuncionamiento del input de la zona de dropeo al eliminar todos los archivos del array principal
-//TODO: Documentar componentes 
+function recreateEventsForInputFileAndInputButton() {
+    const inputFile = document.querySelector('#fileElem');
+    const btnSelectFile = document.querySelector('#btnSelectFile');
+    btnSelectFile?.addEventListener('click', () => inputFile.click());
+    inputFile?.addEventListener('change', function () {
+        const res = manejarArchivos([...this.files])
+        this.type = "text";
+        this.type = "file";
+        if (res) mostrarArchivosCargados();
+    });
+}
+
+//TODO: Documentar componentes y function de reactivar eventos para los input manuales
