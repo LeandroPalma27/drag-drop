@@ -55,8 +55,11 @@ btnSelectFile?.addEventListener('click', () => inputFile.click());
 /* El segundo manda el archivo al handle: */
 inputFile?.addEventListener('change', function () {
     // Esperamos un true en caso de que el handler haya cargado archivos al array principal
+    // Con this.files estamos ejectuando un "inputFile.files" (PARA OBTENER LOS ARCHIVOS)
     const res = manejarArchivos([...this.files])
+    // Convertimos el input a tipo texto
     this.type = "text";
+    // Y luego lo regresamos a tipo file, para que este vacie lo que tenga dentro (PARA PODER SUBIR ARCHIVOS REPETIDOS DESDE ESTE INPUT)
     this.type = "file";
     // Y en ese caso, ejecutamos la funcion que cambia la vista del mainBox (CON LOS ARCHIVOS LISTOS PARA SER ENVIADOS)
     if (res) mostrarArchivosCargados();
@@ -178,9 +181,13 @@ function createDeleteFileEvents(deleteFileButtons) {
     });
 }
 
+// Funcion encargada de REACTIVAR EVENTOS al momento de eliminar todos los archivos de la lista de archivos princpal (al borrar todos los archivos usando el boton de eliminar archivo)
 function recreateEventsForInputFileAndInputButton() {
+    // Volvemos a capturar el inputFile
     const inputFile = document.querySelector('#fileElem');
+    // Y tambien el input encargado de activar el inputFile
     const btnSelectFile = document.querySelector('#btnSelectFile');
+    // Volvemos a generar los eventos para dichos elementos capturados previamente
     btnSelectFile?.addEventListener('click', () => inputFile.click());
     inputFile?.addEventListener('change', function () {
         const res = manejarArchivos([...this.files])
@@ -189,5 +196,3 @@ function recreateEventsForInputFileAndInputButton() {
         if (res) mostrarArchivosCargados();
     });
 }
-
-//TODO: Documentar componentes y function de reactivar eventos para los input manuales
