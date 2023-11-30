@@ -12,5 +12,11 @@ export function secondBox(cards) {
     });
     // Ahora al border box le agregamos el contenedor de todos los cardFiles
     border_box.appendChild(filesContainer)
+    // Creamos la etiqueta que encarga de subir todos los archivos a nuestro servidor en cloudinary
+    const uploadButton = document.createElement('button');
+    uploadButton.textContent = 'Subir';
+    uploadButton.id = 'btnUploadFiles';
+    // Se agrega el contenedor principal
+    border_box.appendChild(uploadButton)
     return border_box;
 }

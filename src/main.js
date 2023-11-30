@@ -8,6 +8,7 @@ import '@fortawesome/fontawesome-free/js/brands'
 import { cardFile } from './js/components/file';
 import { secondBox } from './js/components/second-box';
 import { firstBox } from './js/components/first-box';
+import { subirArchivos } from './js/provider/functions/uploadFiles';
 
 // TODO: TRATAR DE MODULARIZAR EL CODIGO
 // Implementar cambio de vista del mainBox cuando tenga archivos cargados(se cambiara si se detecta que hay archivos cargados en la aplicacion)
@@ -151,6 +152,12 @@ function mostrarArchivosCargados() {
     mainBox.innerHTML = ''
     // Añadimos el nodo que contiene todos los cardFiles
     mainBox.appendChild(finalBox)
+    // Boton que se usa para subir los archivos al servicio cloudinary
+    const btnUploadFiles = document.querySelector('#btnUploadFiles');
+    // Creamos el evento del boton para subir los archivos, y este ejecuta una funcion que sube los archivos con un fetch
+    btnUploadFiles.addEventListener('click', function (e) {
+        subirArchivos(archivosCargados)
+    });
     // Ahora creamos los eventos para los botones de elminar de todos esos cardFiles
     createDeleteFileEvents(document.querySelectorAll('.delete-button'))
 }
@@ -168,9 +175,10 @@ function mostrarArchivosCargados() {
  */
 function createDeleteFileEvents(deleteFileButtons) {
     deleteFileButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', function (e) {
             const res = archivosCargados.filter((value) => {
-                return button.name != value.idFile;
+                // Retornamos solo los archivos que no coincidan con el id que tiene ese boton de eliminar en cuestion:
+                return this.name != value.idFile;
             });
             archivosCargados = [...res]
             console.log(archivosCargados)

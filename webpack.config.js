@@ -76,6 +76,12 @@ module.exports = {
         ...entries,
         
     },
+
+    // Cambio de puerto del proyecto
+    devServer: {
+        port: 9000
+    },
+
     // Salida de los archivos JS (cargan el nombre del template + ".js"):
     output: {
         filename: "js/[name][hash].js",
