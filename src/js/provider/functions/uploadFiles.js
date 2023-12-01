@@ -17,5 +17,7 @@ export function subirArchivos(archivosCargados) {
             "Content-Type": "multipart/form-data"
         },
         body: formData,
+
+        // TODO: Investigar sobre como enviar varios archivos en un formData (LINK MARCADO EN GOOGLE)
     })
 }
