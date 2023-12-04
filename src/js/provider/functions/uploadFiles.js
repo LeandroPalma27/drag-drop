@@ -1,13 +1,13 @@
 import { URL } from "../url-cloudinary-spring-restfulservice";
 
-export function subirArchivos(archivosCargados) {
+export async function subirArchivos(archivosCargados) {
     const onlyFiles = archivosCargados.map(e => e.file);
     const formData = new FormData();
     for (const file of onlyFiles) {
         formData.append("files", file);
     }
 
-    fetch(URL.concat('/upload'), {
+    const res = await fetch(URL.concat('/upload'), {
         method: "POST", 
         mode: "cors",
         cache: "no-cache",
@@ -18,4 +18,5 @@ export function subirArchivos(archivosCargados) {
 
         // TODO: Documentar lo nuevo implementado
     })
+    return res;
 }

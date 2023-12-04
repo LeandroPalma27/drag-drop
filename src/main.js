@@ -156,7 +156,11 @@ function mostrarArchivosCargados() {
     const btnUploadFiles = document.querySelector('#btnUploadFiles');
     // Creamos el evento del boton para subir los archivos, y este ejecuta una funcion que sube los archivos con un fetch
     btnUploadFiles.addEventListener('click', function (e) {
-        subirArchivos(archivosCargados)
+        const res = subirArchivos(archivosCargados)
+        console.log("cargando...")
+        console.log(res.then(e => {
+            if(e.ok) console.log('carga con exito')
+        }));
     });
     // Ahora creamos los eventos para los botones de elminar de todos esos cardFiles
     createDeleteFileEvents(document.querySelectorAll('.delete-button'))
