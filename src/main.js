@@ -157,9 +157,10 @@ function mostrarArchivosCargados() {
     // Creamos el evento del boton para subir los archivos, y este ejecuta una funcion que sube los archivos con un fetch
     btnUploadFiles.addEventListener('click', function (e) {
         const res = subirArchivos(archivosCargados)
-        console.log("cargando...")
+        mostrarBarraCarga();
         console.log(res.then(e => {
-            if(e.ok) console.log('carga con exito')
+            if(e.ok) quitarBarraCarga();
+            else cargarErrorServidor();
         }));
     });
     // Ahora creamos los eventos para los botones de elminar de todos esos cardFiles
@@ -208,3 +209,29 @@ function recreateEventsForInputFileAndInputButton() {
         if (res) mostrarArchivosCargados();
     });
 }
+
+function mostrarBarraCarga() {
+    console.log('cargando...')
+    document.body.firstElementChild.classList.add("cargando");
+    document.body.firstElementChild.nextElementSibling.hidden = false;
+    document.body.firstElementChild.nextElementSibling.classList.add("activo");
+}
+
+function quitarBarraCarga() {
+    console.log('cargo con exito!')
+    document.body.firstElementChild.nextElementSibling.textContent = 'CARGO CON EXITO!'
+    setTimeout(() => {
+        document.body.firstElementChild.nextElementSibling.hidden = true;
+        document.body.firstElementChild.nextElementSibling.textContent = 'Cargando..!'
+        document.body.firstElementChild.nextElementSibling.classList.remove("activo");
+        document.body.firstElementChild.classList.remove("cargando");}
+        , 500);
+    
+}
+
+function cargarErrorServidor() {
+
+}
+
+// TODO: MEJORAR BARRA DE CARGA, TAMBIEN DOCUMENTAR Y HACER TODOS PENDIENTES EN EL BACKEND
+

@@ -10,6 +10,29 @@
     user-select: none;
     /* Standard syntax */
 }
+body {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.barra-carga {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    padding: 10px;
+    justify-content: center;
+    background-color: rgb(37, 37, 37);
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    opacity: 0;
+}
+
+.activo {
+    opacity: 1;
+}
 
 .principal {
     display: flex;
@@ -17,6 +40,7 @@
     align-items: center;
     width: 100vw;
     height: 100vh;
+    transition: all 0.8s ease;
 }
 
 .body-personal {
@@ -180,4 +204,9 @@
 
 .file-dragged-in_1_with-files {
     background-color: rgb(233, 233, 233);
+}
+
+.cargando {
+    transition: all 0.8s ease;
+    filter: blur(1.6rem);
 }

@@ -12,7 +12,7 @@ export async function subirArchivos(archivosCargados) {
         mode: "cors",
         cache: "no-cache",
         headers: {
-            'Access-Control-Allow-Origin' : 'http://localhost:9000'
+            'Access-Control-Allow-Origin' : `http://${window.location.hostname}:9000`
         },
         body: formData,
 
