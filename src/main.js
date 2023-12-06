@@ -1,4 +1,3 @@
-// Para importar el css global se hace asi:
 import './styles.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/js/fontawesome'
@@ -10,18 +9,15 @@ import { secondBox } from './js/components/second-box';
 import { firstBox } from './js/components/first-box';
 import { subirArchivos } from './js/provider/functions/uploadFiles';
 
-// TODO: TRATAR DE MODULARIZAR EL CODIGO
-// Implementar cambio de vista del mainBox cuando tenga archivos cargados(se cambiara si se detecta que hay archivos cargados en la aplicacion)
-
+/* <========== COMPONENTE PARA EL DROPEO Y RECEPECION DE ARCHIVOS EN EL ARRAY PRINCIPAL ==========> */
 // Obtenemos la zona de dropeo de elementos (EN ESTE CASO SERA UN ARCHIVO)
 const mainBox = document.querySelector('.principal_box');
 // Inputfile para seleccionar archivos manualmente
 const inputFile = document.querySelector('#fileElem');
 // Boton que acciona el inputFile (PARA EVITAR USAR EL TEXTO PREDEFINIDO DEL INPUT FILE)
 const btnSelectFile = document.querySelector('#btnSelectFile');
-// Array que almacenara todos los archivos cargados hasta el momento, para su posterior subida
+// ARRAY PRINCIPAL: Array que almacenara todos los archivos cargados hasta el momento, para su posterior subida
 let archivosCargados = [];
-
 // Evento de dropeo de elementos (EXCLUSIVO PARA CUANDO YA SE HAYAN DROPEADO COSAS)
 mainBox.addEventListener('drop', (e) => {
     // Se evalua si se dropearon archivos
@@ -32,15 +28,13 @@ mainBox.addEventListener('drop', (e) => {
         if (res) mostrarArchivosCargados();
     }
 }, false)
-
-    // Eventos para el cambio de diseño del mainBox (PARA CUANDO SE ESTEN ARRASTRANDO ARCHIVOS)
-    ;['dragenter', 'dragover'].forEach(eventName => {
+// Eventos para el cambio de diseño del mainBox (PARA CUANDO SE ESTEN ARRASTRANDO ARCHIVOS)
+;['dragenter', 'dragover'].forEach(eventName => {
         mainBox.addEventListener(eventName, arrastreActivo, false)
-    })
+});
 function arrastreActivo() {
     this.classList.add('file-dragged-in_1');
 }
-
 // Eventos para el cambio de diseño del mainBox (PARA CUANDO NO SE ESTEN ARRASTRANDO ARCHIVOS en la dropzone o ya se hayan dropeado)
 ;['dragleave', 'drop'].forEach(eventName => {
     mainBox.addEventListener(eventName, arrastreNoActivo, false)
@@ -48,7 +42,6 @@ function arrastreActivo() {
 function arrastreNoActivo() {
     this.classList.remove('file-dragged-in_1');
 }
-
 // Eventos para cuando se seleccionen archivos desde el input file
 /* El primero se encarga de accionar el inputfile desde este boton: */
 // Evaluamos que exista el elemento con el '?'
@@ -66,6 +59,8 @@ inputFile?.addEventListener('change', function () {
     if (res) mostrarArchivosCargados();
 });
 
+
+/* <========== COMPONENTE HANDLE PARA LOS ARCHIVOS YA RECEPCIONADOS Y PARA SU PROCESO AL ARRAY PRINCIPAL ==========> */
 // Funcion para cargar archivos al array de archivos listos para enviar
 /*
     * Se ejecuta cada vez que se dropean archivos al mainBox
@@ -73,11 +68,9 @@ inputFile?.addEventListener('change', function () {
     * Esta funcion es la UNICA EN DETECTAR CAMBIOS EN EL ARRAY PRINCIPAL DE ARCHIVOS
 */
 function manejarArchivos(files) {
-
     // Se crean dos array para separar archivos validos (JPG y max 5mb) y no validos (No JPG y/o mas de 5mb)
     const allowedFiles = []
     const notAllowedFiles = []
-
     // Analizamos cada elemento del array de archivos, para evaluar si cumplen las condiciones anteriormente dichas
     for (const file of files) {
         if (file.type == 'image/jpeg' && file.size <= 5000000) {
@@ -88,14 +81,12 @@ function manejarArchivos(files) {
             notAllowedFiles.push(file)
         }
     }
-
     // Luego en caso de que el array de archivos no permitidos tenga algun elemento, mostraremos un alert indicando lo siguiente:
     if (notAllowedFiles.length > 0) alert('Solo archivos JPG y max 5mb por archivo')
-
-    // Si hayb archivos validos, se evaluara esta condicion
+    // Si hay archivos validos, se evaluara esta condicion
     if (allowedFiles.length > 0) {
-        // Y en caso de que la cantidad de elementos del array de archivos validos, sumada a cantidad de archivos ya cargados a la lista de archivos listos para subir, sea 6
-        // se van a pushear en su totalidad a este ultimo array.
+        // Y en caso de que la cantidad de elementos del array de archivos validos, sumada a cantidad de archivos ya cargados a la lista de archivos listos para subir, sea menor o igual
+        // a 6, se van a pushear en su totalidad a este ultimo array.
         if (archivosCargados.length + allowedFiles.length <= 6) {
             allowedFiles.forEach(file => archivosCargados.push(
                 {
@@ -122,9 +113,11 @@ function manejarArchivos(files) {
         // Retornamos true ya que se cargaron archivos al array principal
         return true;
     }
+    // En caso de cumplirse la condicion de arriba, no necesitamos retornar "false", ya que en JS un null se toma como false.
 }
 
 
+/* <========== COMPONENTE PARA EVITAR LA PROPAGACION Y EL DISPARO MULTIPLE DE EVENTOS EN NUESTRA ZONA DE DROPEO (DEBIDO A SU ARQUITECTURA DE DESARROLLO) ==========> */
 // Definimos los preventDefaults necesarios para los eventos implementados (EN ESTE CASO SERA PARA dragenter, dragover, dragleave y drop)
 // Estos evitaran que se disparen eventos repetidos
 const eventNames = ['dragenter', 'dragover', 'dragleave', 'drop'];
@@ -136,6 +129,8 @@ function preventDefaults(e) {
     e.stopPropagation()
 }
 
+
+/* <========== COMPONENTE PARA MOSTRAR LOSA ARCHIVOS CARGADOS EN NUESTRO HTML, REPRESENTADO A TRAVES DE CARDS ==========> */
 // Funcion que muestra los archivos cargados en el array principal (ESTOS SON ARCHIVOS VALIDOS Y LISTOS PARA SUBIR)
 /*
     * Se ejecuta cada que el array principal de archivos recibe un nuevo elemento (ya sea dropeando elementos validos o seleccionando archivos validos desde el inputFile)
@@ -156,18 +151,24 @@ function mostrarArchivosCargados() {
     const btnUploadFiles = document.querySelector('#btnUploadFiles');
     // Creamos el evento del boton para subir los archivos, y este ejecuta una funcion que sube los archivos con un fetch
     btnUploadFiles.addEventListener('click', function (e) {
+        // Llamamos a la funcion que consume nuestra API para subir los archivos cargados en el array principal
         const res = subirArchivos(archivosCargados)
+        // Llamamos a la funcion que carga la barra de carga en nuestra vista
         mostrarBarraCarga();
-        console.log(res.then(e => {
-            if(e.ok) quitarBarraCarga();
+        // En el response obtenido de nuestra promesa, en caso de recibirse con exito y tener una respuesta HTTP 20X
+        // LLamara a la funcion "quitarBarraCarga()", que se encarga que ocultar la barra de carga de la vista
+        res.then(e => {
+            if (e.ok) quitarBarraCarga();
+            // Caso contrario, llamara a la funcion que carga una pantalla de error de servidor, al recibir una respueta HTTP 50X
             else cargarErrorServidor();
-        }));
+        });
     });
     // Ahora creamos los eventos para los botones de elminar de todos esos cardFiles
     createDeleteFileEvents(document.querySelectorAll('.delete-button'))
 }
 
 
+/* <========== COMPONENTE PARA LA CREACION DE LOS BOTONES QUE ELIMINAN UNA FOTO DE LA VISTA HTML (Y TAMBIEN DEL ARRAY PRINCPAL) ==========> */
 // Function que crea los eventos para cada uno de los botones de eliminar de los cardFiles
 /*
     * Recibe un array de todos los botones, obtenidos de un querySelectorAll desde la function de mostrarArchivosCargados()
@@ -194,6 +195,8 @@ function createDeleteFileEvents(deleteFileButtons) {
     });
 }
 
+
+/* <========== COMPONENTE PARA LA REACTIVACION DE LOS EVENTOS PARA EL INPUTFILE QUE PROCESA ARCHIVOS DESDE UN BOTON EN LA VISTA HTML ==========> */
 // Funcion encargada de REACTIVAR EVENTOS al momento de eliminar todos los archivos de la lista de archivos princpal (al borrar todos los archivos usando el boton de eliminar archivo)
 function recreateEventsForInputFileAndInputButton() {
     // Volvemos a capturar el inputFile
@@ -210,28 +213,38 @@ function recreateEventsForInputFileAndInputButton() {
     });
 }
 
+
+/* <========== FUNCIONES PARA MOSTRAR Y QUITAR LA BARRA DE CARGA ==========> */
+// Mostrando barra de carga, al darle click a subir archivos
 function mostrarBarraCarga() {
     console.log('cargando...')
+    // Al main box le asigamos la clase CSS "cargando", que hace que tenga la propiedad BLUR
     document.body.firstElementChild.classList.add("cargando");
+    // Al siguiente elemento del mainbox, le cambiamos el estado hidden a false, para que se muestre en el DOM
     document.body.firstElementChild.nextElementSibling.hidden = false;
+    // Y a ese elemento, le cargamos la clase CSS "activo", que carga la propiedad opacity en 1
     document.body.firstElementChild.nextElementSibling.classList.add("activo");
 }
 
 function quitarBarraCarga() {
     console.log('cargo con exito!')
+    // Quitando la barra de carga, llamamos a esta funcion
+    // Que a la barra de carga, le cambia el texto a un "cargo con exito! (YA QUE SE RECIBIO UN HTTP RESPONSE 20X)"
     document.body.firstElementChild.nextElementSibling.textContent = 'CARGO CON EXITO!'
+    // REINICIAMOS EL ARRAY PRINCIPAL DE ARCHIVOS
+    archivosCargados = [];
+    // Y AL MAIN BOX, LO DEJAMOS COMO AL INICIO, CON LA ZONA DE DROPEO INTACTA
+    mainBox.innerHTML = '', mainBox.appendChild(firstBox()), recreateEventsForInputFileAndInputButton(), mainBox.classList.remove('file-dragged-in_1_with-files');
+    // Ejecutamos un timeout que luego de 500ms, establezca a la barra de carga con un hidden, le regrese el texto a "Cargando..." y le quite las clases CSS "activo y cargando"
     setTimeout(() => {
         document.body.firstElementChild.nextElementSibling.hidden = true;
-        document.body.firstElementChild.nextElementSibling.textContent = 'Cargando..!'
+        document.body.firstElementChild.nextElementSibling.textContent = 'Cargando...'
         document.body.firstElementChild.nextElementSibling.classList.remove("activo");
-        document.body.firstElementChild.classList.remove("cargando");}
-        , 500);
-    
+        document.body.firstElementChild.classList.remove("cargando");
+    }, 500);
 }
 
-function cargarErrorServidor() {
-
-}
+function cargarErrorServidor() {}
 
 // TODO: MEJORAR BARRA DE CARGA, TAMBIEN DOCUMENTAR Y HACER TODOS PENDIENTES EN EL BACKEND
 
