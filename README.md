@@ -13,3 +13,4 @@ No olvidar que debera ejecutar los comandos en el respectivo orden.
 2. Instalar paquetes de node con el comando "npm install"
 3. Ejecutar el comando "npm install webpack --save-dev" para instalar la ultima dependencia necesaria
 4. Ejecutar el proyecto con el comando "npx webpack serve"
+5. En caso de dar error, borrar todo lo instalado y clonado, para posteriormente repetir el proceso.
