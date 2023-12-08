@@ -157,10 +157,19 @@ function mostrarArchivosCargados() {
         mostrarBarraCarga();
         // En el response obtenido de nuestra promesa, en caso de recibirse con exito y tener una respuesta HTTP 20X
         // LLamara a la funcion "quitarBarraCarga()", que se encarga que ocultar la barra de carga de la vista
-        res.then(e => {
-            if (e.ok) quitarBarraCarga();
+        res.then((e) => {
+            if (e.ok) {
+                quitarBarraCarga();
+                const res = e.json();
+                console.log(res.then((e) => {
+                    console.log(e)
+                }))
+            } else {
+                cargarErrorServidor()
+            }
             // Caso contrario, llamara a la funcion que carga una pantalla de error de servidor, al recibir una respueta HTTP 50X
-            else cargarErrorServidor();
+        }).catch(() => {
+            cargarErrorServidor()
         });
     });
     // Ahora creamos los eventos para los botones de elminar de todos esos cardFiles
@@ -244,7 +253,23 @@ function quitarBarraCarga() {
     }, 500);
 }
 
-function cargarErrorServidor() {}
+function cargarErrorServidor() {
+    console.log('OCURRIO UN ERROR DE SERVIDOR')
+    // Quitando la barra de carga, llamamos a esta funcion
+    // Que a la barra de carga, le cambia el texto a un "cargo con exito! (YA QUE SE RECIBIO UN HTTP RESPONSE 20X)"
+    document.body.firstElementChild.nextElementSibling.textContent = 'OCURRIO UN ERROR DE SERVIDOR, INTENTE DE NUEVO'
+    // REINICIAMOS EL ARRAY PRINCIPAL DE ARCHIVOS
+    archivosCargados = [];
+    // Y AL MAIN BOX, LO DEJAMOS COMO AL INICIO, CON LA ZONA DE DROPEO INTACTA
+    mainBox.innerHTML = '', mainBox.appendChild(firstBox()), recreateEventsForInputFileAndInputButton(), mainBox.classList.remove('file-dragged-in_1_with-files');
+    // Ejecutamos un timeout que luego de 500ms, establezca a la barra de carga con un hidden, le regrese el texto a "Cargando..." y le quite las clases CSS "activo y cargando"
+    setTimeout(() => {
+        document.body.firstElementChild.nextElementSibling.hidden = true;
+        document.body.firstElementChild.nextElementSibling.textContent = 'Cargando...'
+        document.body.firstElementChild.nextElementSibling.classList.remove("activo");
+        document.body.firstElementChild.classList.remove("cargando");
+    }, 500);
+}
 
 // TODO: MEJORAR BARRA DE CARGA, TAMBIEN DOCUMENTAR Y HACER TODOS PENDIENTES EN EL BACKEND
 
