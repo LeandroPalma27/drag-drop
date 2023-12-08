@@ -14,3 +14,4 @@ No olvidar que debera ejecutar los comandos en el respectivo orden.
 3. Ejecutar el comando "npm install webpack --save-dev" para instalar la ultima dependencia necesaria
 4. Ejecutar el proyecto con el comando "npx webpack serve"
 5. En caso de dar error, borrar todo lo instalado y clonado, para posteriormente repetir el proceso.
+6. Antes de probar la aplicacion, recodar tener el servicio backend ejecutandose, el cual puedes encontrar en el siguiente repositorio [https://github.com/LeandroPalma27/images-upload-cloudinary](https://github.com/LeandroPalma27/images-upload-cloudinary)
